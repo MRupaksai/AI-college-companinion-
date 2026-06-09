@@ -1,7 +1,6 @@
 node_modules
 .next
 out
-docs
 .env
 *.db
 *.db-journal
