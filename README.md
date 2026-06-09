@@ -14,6 +14,13 @@ A seamless all-in-one academic assistant for college students. Upload your sylla
 
 **GitHub Pages:** [https://mrupaksai.github.io/AI-college-companinion-/](https://mrupaksai.github.io/AI-college-companinion-/)
 
+### Enable GitHub Pages (one-time)
+
+1. Go to [Repository Settings → Pages](https://github.com/MRupaksai/AI-college-companinion-/settings/pages)
+2. Under **Build and deployment**, set **Source** to **Deploy from a branch**
+3. Set **Branch** to `gh-pages` and folder to `/ (root)`
+4. Click **Save** — the site updates after each push to `main`
+
 ## Quick Start (Local)
 
 ```bash
