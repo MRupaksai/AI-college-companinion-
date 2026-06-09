@@ -1,0 +1,114 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Subject {
+  id          String   @id @default(cuid())
+  name        String
+  code        String?
+  difficulty  Int      @default(3) // 1-5 scale
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  units            Unit[]
+  importantDates   ImportantDate[]
+  studyPlans       StudyPlan[]
+  attendanceRecords AttendanceRecord[]
+  markComponents   MarkComponent[]
+  notes            Note[]
+  quizzes          Quiz[]
+}
+
+model Unit {
+  id        String  @id @default(cuid())
+  subjectId String
+  number    Int
+  title     String
+  subject   Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+  topics    Topic[]
+}
+
+model Topic {
+  id     String @id @default(cuid())
+  unitId String
+  title  String
+  unit   Unit   @relation(fields: [unitId], references: [id], onDelete: Cascade)
+}
+
+model ImportantDate {
+  id          String   @id @default(cuid())
+  subjectId   String?
+  title       String
+  date        DateTime
+  type        String   // exam, assignment, holiday, other
+  description String?
+  subject     Subject? @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+}
+
+model StudyPlan {
+  id              String   @id @default(cuid())
+  subjectId       String
+  dailyMinutes    Int
+  startDate       DateTime
+  endDate         DateTime
+  planJson        String   // JSON array of daily tasks
+  createdAt       DateTime @default(now())
+  subject         Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+}
+
+model AttendanceRecord {
+  id        String   @id @default(cuid())
+  subjectId String
+  date      DateTime
+  present   Boolean
+  subject   Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+
+  @@unique([subjectId, date])
+}
+
+model MarkComponent {
+  id          String  @id @default(cuid())
+  subjectId   String
+  name        String  // Assignment 1, Mid-term, Lab, etc.
+  maxMarks    Float
+  obtainedMarks Float?
+  weight      Float   // percentage weight in final grade
+  subject     Subject @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+}
+
+model Note {
+  id        String   @id @default(cuid())
+  subjectId String
+  topicTitle String
+  content   String
+  createdAt DateTime @default(now())
+  subject   Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+}
+
+model Quiz {
+  id         String   @id @default(cuid())
+  subjectId  String
+  topicTitle String
+  questionsJson String // JSON array of questions
+  createdAt  DateTime @default(now())
+  subject    Subject  @relation(fields: [subjectId], references: [id], onDelete: Cascade)
+}
+
+model Settings {
+  id                  String @id @default("default")
+  dailyStudyMinutes   Int    @default(120)
+  attendanceTarget    Float  @default(75)
+  gradeTarget         Float  @default(75)
+}
+
+model SyllabusUpload {
+  id        String   @id @default(cuid())
+  fileName  String?
+  rawText   String
+  createdAt DateTime @default(now())
+}
