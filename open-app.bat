@@ -1,6 +1,8 @@
 @echo off
 cd /d "%~dp0"
-echo Starting AI College Companion...
-start "" "http://localhost:3000"
+echo Opening AI College Companion...
+start "" "https://mrupaksai.github.io/AI-college-companinion-/"
 start "" "%~dp0index.html"
-npm run dev
+echo.
+echo For local dev run: npm run dev
+pause

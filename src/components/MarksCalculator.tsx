@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { Calculator, Plus, Trash2, TrendingUp } from "lucide-react";
 import { Card, Button, Input, Select, Badge, ProgressBar, EmptyState } from "./ui";
 import type { MarksSummary, WhatIfResult } from "@/lib/types";
+import * as api from "@/lib/api";
 
 interface Subject {
   id: string;
@@ -42,10 +43,7 @@ export function MarksCalculator({ subjects }: { subjects: Subject[] }) {
   }, [selectedSubject, targetGrade]);
 
   async function loadMarks() {
-    const res = await fetch(
-      `/api/marks?subjectId=${selectedSubject}&target=${targetGrade}`
-    );
-    const data = await res.json();
+    const data = await api.fetchMarks(selectedSubject, targetGrade);
     setComponents(data.components);
     setSummary(data.summary);
     setWhatIf(data.whatIf);
@@ -54,33 +52,22 @@ export function MarksCalculator({ subjects }: { subjects: Subject[] }) {
 
   async function addComponent() {
     if (!newComponent.name) return;
-    await fetch("/api/marks", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        subjectId: selectedSubject,
-        ...newComponent,
-        obtainedMarks: newComponent.obtainedMarks || null,
-      }),
+    await api.createMarkComponent({
+      subjectId: selectedSubject,
+      ...newComponent,
+      obtainedMarks: newComponent.obtainedMarks || null,
     });
     setNewComponent({ name: "", maxMarks: "100", obtainedMarks: "", weight: "20" });
     loadMarks();
   }
 
   async function updateComponent(id: string, obtainedMarks: string) {
-    await fetch("/api/marks", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id,
-        obtainedMarks: obtainedMarks === "" ? null : obtainedMarks,
-      }),
-    });
+    await api.patchMarkComponent(id, obtainedMarks === "" ? null : obtainedMarks);
     loadMarks();
   }
 
   async function deleteComponent(id: string) {
-    await fetch(`/api/marks?id=${id}`, { method: "DELETE" });
+    await api.removeMarkComponent(id);
     loadMarks();
   }
 

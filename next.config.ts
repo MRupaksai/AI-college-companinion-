@@ -1,10 +1,19 @@
 import type { NextConfig } from "next";
 
+const isGithubPages = process.env.GITHUB_PAGES === "true";
+const repoName = "AI-college-companinion-";
+
 const nextConfig: NextConfig = {
-  experimental: {
-    serverActions: {
-      bodySizeLimit: "10mb",
-    },
+  ...(isGithubPages
+    ? {
+        output: "export",
+        basePath: `/${repoName}`,
+        assetPrefix: `/${repoName}/`,
+        trailingSlash: true,
+      }
+    : {}),
+  images: {
+    unoptimized: true,
   },
 };
 

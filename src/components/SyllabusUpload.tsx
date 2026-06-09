@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Upload, FileText, Sparkles } from "lucide-react";
 import { Card, Button, Textarea, Badge, Spinner } from "./ui";
+import * as api from "@/lib/api";
 
 interface Subject {
   id: string;
@@ -25,18 +26,7 @@ export function SyllabusUpload({ onSuccess }: { onSuccess: () => void }) {
     setResult(null);
 
     try {
-      const formData = new FormData();
-      if (file) formData.append("file", file);
-      if (text.trim()) formData.append("text", text);
-
-      const res = await fetch("/api/syllabus/upload", {
-        method: "POST",
-        body: formData,
-      });
-
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Upload failed");
-
+      const data = await api.uploadSyllabus(file, text.trim() || undefined);
       setResult(data.subjects);
       setText("");
       onSuccess();

@@ -10,30 +10,32 @@ A seamless all-in-one academic assistant for college students. Upload your sylla
 - **Marks Calculator** — Add assignments, internals, labs with weights. Simulate what-if scenarios to see what you need to score for a target grade.
 - **Notes & Quizzes** — AI generates concise revision notes and mixed quizzes (MCQs, short answers, numericals) per topic.
 
-## Quick Start
+## Live Demo
+
+**GitHub Pages:** [https://mrupaksai.github.io/AI-college-companinion-/](https://mrupaksai.github.io/AI-college-companinion-/)
+
+## Quick Start (Local)
 
 ```bash
-# Install dependencies
 npm install
-
-# Set up database
-npm run db:push
-
-# Start development server
-npm dev
+npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).
 
+Data is stored in your browser (localStorage) — no database setup required.
+
 ## AI Configuration (Optional)
 
-For best results, add your OpenAI API key to `.env`:
+For enhanced AI extraction and generation, set an OpenAI API key in browser localStorage:
 
-```
-OPENAI_API_KEY=sk-your-key-here
+```js
+// In browser console on the app page:
+JSON.parse(localStorage.getItem('ai-college-companion-data')).settings.openaiApiKey = 'sk-your-key';
+// Then refresh — or extend Settings UI to add this field
 ```
 
-Without an API key, the app uses intelligent local parsing and mock AI generation — fully functional for demos and testing.
+Without an API key, the app uses intelligent local parsing and Smart Mode generation.
 
 ## Usage Flow
 
@@ -43,13 +45,23 @@ Without an API key, the app uses intelligent local parsing and mock AI generatio
 4. **Marks** — Add mark components (assignments, mid-terms, labs). Enter scores and use what-if analysis.
 5. **Notes & Quiz** — Pick a topic, optionally paste notes, and generate revision material.
 
+## Deploy to GitHub Pages
+
+Pushes to `main` automatically deploy via GitHub Actions.
+
+Manual build:
+```bash
+GITHUB_PAGES=true npm run build:static
+```
+Output is in the `out/` folder.
+
 ## Tech Stack
 
-- Next.js 15 (App Router)
+- Next.js 15 (static export for GitHub Pages)
 - TypeScript
 - Tailwind CSS
-- Prisma + SQLite
-- OpenAI API (optional)
+- Browser localStorage
+- OpenAI API (optional, client-side)
 
 ## Sample Syllabus Format
 

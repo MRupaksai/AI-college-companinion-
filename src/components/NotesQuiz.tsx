@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { BookOpen, Brain, ChevronDown, ChevronUp, CheckCircle } from "lucide-react";
 import { Card, Button, Select, Textarea, Badge, EmptyState, Spinner } from "./ui";
 import type { QuizQuestion } from "@/lib/types";
+import * as api from "@/lib/api";
 
 interface Subject {
   id: string;
@@ -57,9 +58,7 @@ export function NotesQuiz({ subjects }: { subjects: Subject[] }) {
   }, [selectedSubject]);
 
   async function loadContent() {
-    const query = selectedSubject ? `?subjectId=${selectedSubject}` : "";
-    const res = await fetch(`/api/notes${query}`);
-    const data = await res.json();
+    const data = await api.fetchNotes(selectedSubject || undefined);
     setNotes(data.notes);
     setQuizzes(data.quizzes);
   }
@@ -68,15 +67,11 @@ export function NotesQuiz({ subjects }: { subjects: Subject[] }) {
     if (!selectedSubject || !selectedTopic) return;
     setLoading(true);
     try {
-      await fetch("/api/notes", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          subjectId: selectedSubject,
-          topicTitle: selectedTopic,
-          sourceText,
-          type,
-        }),
+      await api.createNotesOrQuiz({
+        subjectId: selectedSubject,
+        topicTitle: selectedTopic,
+        sourceText,
+        type,
       });
       await loadContent();
     } finally {

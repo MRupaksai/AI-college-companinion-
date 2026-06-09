@@ -17,6 +17,7 @@ import { AttendanceTracker } from "./AttendanceTracker";
 import { MarksCalculator } from "./MarksCalculator";
 import { NotesQuiz } from "./NotesQuiz";
 import { Badge } from "./ui";
+import * as api from "@/lib/api";
 
 type Tab = "syllabus" | "study" | "attendance" | "marks" | "revision";
 
@@ -44,12 +45,10 @@ export function Dashboard() {
   const [aiEnabled, setAiEnabled] = useState(false);
 
   const loadData = useCallback(async () => {
-    const [subjectsRes, settingsRes] = await Promise.all([
-      fetch("/api/subjects"),
-      fetch("/api/settings"),
+    const [subjectsData, settingsData] = await Promise.all([
+      api.fetchSubjects(),
+      api.fetchSettings(),
     ]);
-    const subjectsData = await subjectsRes.json();
-    const settingsData = await settingsRes.json();
     setSubjects(subjectsData);
     setDailyMinutes(settingsData.dailyStudyMinutes);
     setAiEnabled(settingsData.aiEnabled);

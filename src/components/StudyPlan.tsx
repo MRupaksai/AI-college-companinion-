@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Calendar, Clock, RefreshCw } from "lucide-react";
 import { Card, Button, Input, Badge, EmptyState, Spinner } from "./ui";
+import * as api from "@/lib/api";
 
 interface StudyPlanDay {
   date: string;
@@ -32,13 +33,7 @@ export function StudyPlanView({
   async function generate() {
     setLoading(true);
     try {
-      const res = await fetch("/api/study-plan", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ dailyMinutes }),
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error);
+      const data = await api.generateStudyPlanApi(dailyMinutes);
       setPlans(data.plans);
       setFullPlan(data.fullPlan);
       setGenerated(true);
