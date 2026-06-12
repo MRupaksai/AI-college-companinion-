@@ -1,14 +1,6 @@
 "use client";
 
-import { type ReactNode } from "react";
-
-export function Card({
-  children,
-  className = "",
-}: {
-  children: ReactNode;
-  className?: string;
-}) {
+export function Card({ children, className = "" }) {
   return (
     <div className={`glass rounded-2xl p-5 shadow-xl shadow-black/20 animate-fade-in ${className}`}>
       {children}
@@ -23,13 +15,6 @@ export function Button({
   disabled = false,
   type = "button",
   className = "",
-}: {
-  children: ReactNode;
-  onClick?: () => void;
-  variant?: "primary" | "secondary" | "danger" | "ghost";
-  disabled?: boolean;
-  type?: "button" | "submit";
-  className?: string;
 }) {
   const variants = {
     primary: "bg-brand-600 hover:bg-brand-500 text-white shadow-lg shadow-brand-600/25",
@@ -50,10 +35,7 @@ export function Button({
   );
 }
 
-export function Input({
-  label,
-  ...props
-}: { label?: string } & React.InputHTMLAttributes<HTMLInputElement>) {
+export function Input({ label, ...props }) {
   return (
     <label className="block space-y-1.5">
       {label && <span className="text-sm text-slate-400">{label}</span>}
@@ -65,11 +47,7 @@ export function Input({
   );
 }
 
-export function Select({
-  label,
-  children,
-  ...props
-}: { label?: string; children: ReactNode } & React.SelectHTMLAttributes<HTMLSelectElement>) {
+export function Select({ label, children, ...props }) {
   return (
     <label className="block space-y-1.5">
       {label && <span className="text-sm text-slate-400">{label}</span>}
@@ -83,10 +61,7 @@ export function Select({
   );
 }
 
-export function Textarea({
-  label,
-  ...props
-}: { label?: string } & React.TextareaHTMLAttributes<HTMLTextAreaElement>) {
+export function Textarea({ label, ...props }) {
   return (
     <label className="block space-y-1.5">
       {label && <span className="text-sm text-slate-400">{label}</span>}
@@ -98,13 +73,7 @@ export function Textarea({
   );
 }
 
-export function Badge({
-  children,
-  color = "indigo",
-}: {
-  children: ReactNode;
-  color?: "indigo" | "green" | "amber" | "red" | "slate";
-}) {
+export function Badge({ children, color = "indigo" }) {
   const colors = {
     indigo: "bg-indigo-500/20 text-indigo-300 border-indigo-500/30",
     green: "bg-emerald-500/20 text-emerald-300 border-emerald-500/30",
@@ -120,7 +89,7 @@ export function Badge({
   );
 }
 
-export function ProgressBar({ value, max = 100 }: { value: number; max?: number }) {
+export function ProgressBar({ value, max = 100 }) {
   const pct = Math.min(100, Math.max(0, (value / max) * 100));
   const color = pct >= 75 ? "bg-emerald-500" : pct >= 50 ? "bg-amber-500" : "bg-red-500";
 
@@ -131,7 +100,7 @@ export function ProgressBar({ value, max = 100 }: { value: number; max?: number 
   );
 }
 
-export function EmptyState({ title, description }: { title: string; description: string }) {
+export function EmptyState({ title, description }) {
   return (
     <div className="flex flex-col items-center justify-center py-12 text-center">
       <div className="mb-3 text-4xl opacity-40">📚</div>

@@ -5,28 +5,10 @@ import { Calendar, Clock, RefreshCw } from "lucide-react";
 import { Card, Button, Input, Badge, EmptyState, Spinner } from "./ui";
 import * as api from "@/lib/api";
 
-interface StudyPlanDay {
-  date: string;
-  subjectName: string;
-  tasks: { topic: string; unit: string; minutes: number; activity: string }[];
-}
-
-interface Plan {
-  id: string;
-  subject: { name: string };
-  plan: StudyPlanDay[];
-}
-
-export function StudyPlanView({
-  subjects,
-  dailyMinutes: initialMinutes,
-}: {
-  subjects: { id: string; name: string }[];
-  dailyMinutes: number;
-}) {
+export function StudyPlanView({ subjects, dailyMinutes: initialMinutes }) {
   const [dailyMinutes, setDailyMinutes] = useState(initialMinutes);
-  const [plans, setPlans] = useState<Plan[]>([]);
-  const [fullPlan, setFullPlan] = useState<StudyPlanDay[]>([]);
+  const [plans, setPlans] = useState([]);
+  const [fullPlan, setFullPlan] = useState([]);
   const [loading, setLoading] = useState(false);
   const [generated, setGenerated] = useState(false);
 

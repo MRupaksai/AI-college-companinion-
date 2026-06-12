@@ -18,19 +18,10 @@ import { MarksCalculator } from "./MarksCalculator";
 import { NotesQuiz } from "./NotesQuiz";
 import { Badge } from "./ui";
 import * as api from "@/lib/api";
+import { hydrateFromSupabase } from "@/lib/storage";
+import { isSupabaseEnabled } from "@/lib/supabase";
 
-type Tab = "syllabus" | "study" | "attendance" | "marks" | "revision";
-
-interface Subject {
-  id: string;
-  name: string;
-  code?: string | null;
-  difficulty: number;
-  units: { number: number; title: string; topics: { title: string }[] }[];
-  importantDates: { title: string; date: string; type: string }[];
-}
-
-const tabs: { id: Tab; label: string; icon: typeof Upload }[] = [
+const tabs = [
   { id: "syllabus", label: "Syllabus", icon: Upload },
   { id: "study", label: "Study Plan", icon: Calendar },
   { id: "attendance", label: "Attendance", icon: UserCheck },
@@ -39,8 +30,8 @@ const tabs: { id: Tab; label: string; icon: typeof Upload }[] = [
 ];
 
 export function Dashboard() {
-  const [activeTab, setActiveTab] = useState<Tab>("syllabus");
-  const [subjects, setSubjects] = useState<Subject[]>([]);
+  const [activeTab, setActiveTab] = useState("syllabus");
+  const [subjects, setSubjects] = useState([]);
   const [dailyMinutes, setDailyMinutes] = useState(120);
   const [aiEnabled, setAiEnabled] = useState(false);
 
@@ -55,7 +46,11 @@ export function Dashboard() {
   }, []);
 
   useEffect(() => {
-    loadData();
+    async function init() {
+      await hydrateFromSupabase();
+      loadData();
+    }
+    init();
   }, [loadData]);
 
   const upcomingDates = subjects
@@ -86,6 +81,9 @@ export function Dashboard() {
               <Sparkles className="mr-1 inline h-3 w-3" />
               {aiEnabled ? "AI Enabled" : "Smart Mode"}
             </Badge>
+            {isSupabaseEnabled() && (
+              <Badge color="green">Cloud Sync</Badge>
+            )}
             {subjects.length > 0 && (
               <Badge color="indigo">
                 <BookOpen className="mr-1 inline h-3 w-3" />
@@ -162,15 +160,7 @@ export function Dashboard() {
   );
 }
 
-function StatCard({
-  label,
-  value,
-  sub,
-}: {
-  label: string;
-  value: string;
-  sub?: string;
-}) {
+function StatCard({ label, value, sub }) {
   return (
     <div className="glass rounded-2xl p-4">
       <p className="text-xs text-slate-500">{label}</p>

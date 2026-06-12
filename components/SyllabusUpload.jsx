@@ -5,22 +5,14 @@ import { Upload, FileText, Sparkles } from "lucide-react";
 import { Card, Button, Textarea, Badge, Spinner } from "./ui";
 import * as api from "@/lib/api";
 
-interface Subject {
-  id: string;
-  name: string;
-  code?: string | null;
-  units: { number: number; title: string; topics: { title: string }[] }[];
-  importantDates: { title: string; date: string; type: string }[];
-}
-
-export function SyllabusUpload({ onSuccess }: { onSuccess: () => void }) {
+export function SyllabusUpload({ onSuccess }) {
   const [text, setText] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [result, setResult] = useState<Subject[] | null>(null);
+  const [result, setResult] = useState(null);
   const [dragOver, setDragOver] = useState(false);
 
-  async function handleUpload(file?: File) {
+  async function handleUpload(file) {
     setLoading(true);
     setError("");
     setResult(null);
@@ -37,7 +29,7 @@ export function SyllabusUpload({ onSuccess }: { onSuccess: () => void }) {
     }
   }
 
-  function onDrop(e: React.DragEvent) {
+  function onDrop(e) {
     e.preventDefault();
     setDragOver(false);
     const file = e.dataTransfer.files[0];

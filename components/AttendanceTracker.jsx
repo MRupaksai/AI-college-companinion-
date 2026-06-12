@@ -3,22 +3,10 @@
 import { useEffect, useState } from "react";
 import { UserCheck, UserX, Target } from "lucide-react";
 import { Card, Button, Input, Select, Badge, ProgressBar, EmptyState } from "./ui";
-import type { AttendanceProjection } from "@/lib/types";
 import * as api from "@/lib/api";
 
-interface Subject {
-  id: string;
-  name: string;
-}
-
-interface AttendanceSummary {
-  subjectId: string;
-  subjectName: string;
-  projection: AttendanceProjection;
-}
-
-export function AttendanceTracker({ subjects }: { subjects: Subject[] }) {
-  const [summary, setSummary] = useState<AttendanceSummary[]>([]);
+export function AttendanceTracker({ subjects }) {
+  const [summary, setSummary] = useState([]);
   const [target, setTarget] = useState(75);
   const [selectedSubject, setSelectedSubject] = useState("");
   const [date, setDate] = useState(new Date().toISOString().split("T")[0]);
@@ -37,7 +25,7 @@ export function AttendanceTracker({ subjects }: { subjects: Subject[] }) {
     load();
   }, []);
 
-  async function markAttendance(present: boolean) {
+  async function markAttendance(present) {
     if (!selectedSubject) return;
     setLoading(true);
     await api.markAttendance(selectedSubject, date, present);
@@ -45,7 +33,7 @@ export function AttendanceTracker({ subjects }: { subjects: Subject[] }) {
     setLoading(false);
   }
 
-  async function updateTarget(newTarget: number) {
+  async function updateTarget(newTarget) {
     setTarget(newTarget);
     await api.setAttendanceTarget(newTarget);
     await load();

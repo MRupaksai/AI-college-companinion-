@@ -3,38 +3,17 @@
 import { useEffect, useState } from "react";
 import { BookOpen, Brain, ChevronDown, ChevronUp, CheckCircle } from "lucide-react";
 import { Card, Button, Select, Textarea, Badge, EmptyState, Spinner } from "./ui";
-import type { QuizQuestion } from "@/lib/types";
 import * as api from "@/lib/api";
 
-interface Subject {
-  id: string;
-  name: string;
-  units: { topics: { title: string }[] }[];
-}
-
-interface Note {
-  id: string;
-  topicTitle: string;
-  content: string;
-  subject: { name: string };
-}
-
-interface Quiz {
-  id: string;
-  topicTitle: string;
-  questions: QuizQuestion[];
-  subject: { name: string };
-}
-
-export function NotesQuiz({ subjects }: { subjects: Subject[] }) {
+export function NotesQuiz({ subjects }) {
   const [selectedSubject, setSelectedSubject] = useState("");
   const [selectedTopic, setSelectedTopic] = useState("");
   const [sourceText, setSourceText] = useState("");
-  const [notes, setNotes] = useState<Note[]>([]);
-  const [quizzes, setQuizzes] = useState<Quiz[]>([]);
+  const [notes, setNotes] = useState([]);
+  const [quizzes, setQuizzes] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [expandedQuiz, setExpandedQuiz] = useState<string | null>(null);
-  const [revealedAnswers, setRevealedAnswers] = useState<Set<string>>(new Set());
+  const [expandedQuiz, setExpandedQuiz] = useState(null);
+  const [revealedAnswers, setRevealedAnswers] = useState(new Set());
 
   const topics =
     subjects
@@ -63,7 +42,7 @@ export function NotesQuiz({ subjects }: { subjects: Subject[] }) {
     setQuizzes(data.quizzes);
   }
 
-  async function generate(type: "notes" | "quiz") {
+  async function generate(type) {
     if (!selectedSubject || !selectedTopic) return;
     setLoading(true);
     try {
@@ -79,7 +58,7 @@ export function NotesQuiz({ subjects }: { subjects: Subject[] }) {
     }
   }
 
-  function toggleAnswer(id: string) {
+  function toggleAnswer(id) {
     setRevealedAnswers((prev) => {
       const next = new Set(prev);
       if (next.has(id)) next.delete(id);

@@ -25,11 +25,22 @@ A seamless all-in-one academic assistant for college students. Upload your sylla
 
 > If the site shows only the README, Pages is pointing at the wrong branch/folder — use one of the options above.
 
+## Project Structure
+
+```
+app/
+  layout.js      # Root layout + Inter font
+  page.js        # Main dashboard page
+  global.css     # Tailwind + animations
+components/      # React UI (lucide-react icons)
+lib/             # Client-side API, storage, AI logic
+```
+
 ## Quick Start (Local)
 
 ```bash
-npm install
-npm run dev
+pnpm install
+pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000).

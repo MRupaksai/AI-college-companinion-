@@ -1,9 +1,8 @@
-import type { NextConfig } from "next";
-
 const isGithubPages = process.env.GITHUB_PAGES === "true";
 const repoName = "AI-college-companinion-";
 
-const nextConfig: NextConfig = {
+/** @type {import('next').NextConfig} */
+const nextConfig = {
   ...(isGithubPages
     ? {
         output: "export",

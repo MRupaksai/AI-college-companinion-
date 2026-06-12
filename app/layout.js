@@ -1,23 +1,18 @@
-import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import "./globals.css";
+import "./global.css";
 
 const inter = Inter({
   subsets: ["latin"],
-  variable: "--font-geist-sans",
+  variable: "--font-inter",
 });
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "AI College Companion",
   description:
     "Upload syllabi, plan studies, track attendance, calculate marks, and generate revision notes & quizzes.",
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className={`${inter.variable} font-sans antialiased`}>{children}</body>

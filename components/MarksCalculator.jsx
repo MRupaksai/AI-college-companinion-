@@ -3,27 +3,13 @@
 import { useEffect, useState } from "react";
 import { Calculator, Plus, Trash2, TrendingUp } from "lucide-react";
 import { Card, Button, Input, Select, Badge, ProgressBar, EmptyState } from "./ui";
-import type { MarksSummary, WhatIfResult } from "@/lib/types";
 import * as api from "@/lib/api";
 
-interface Subject {
-  id: string;
-  name: string;
-}
-
-interface MarkComponent {
-  id: string;
-  name: string;
-  maxMarks: number;
-  obtainedMarks: number | null;
-  weight: number;
-}
-
-export function MarksCalculator({ subjects }: { subjects: Subject[] }) {
+export function MarksCalculator({ subjects }) {
   const [selectedSubject, setSelectedSubject] = useState("");
-  const [components, setComponents] = useState<MarkComponent[]>([]);
-  const [summary, setSummary] = useState<MarksSummary | null>(null);
-  const [whatIf, setWhatIf] = useState<WhatIfResult | null>(null);
+  const [components, setComponents] = useState([]);
+  const [summary, setSummary] = useState(null);
+  const [whatIf, setWhatIf] = useState(null);
   const [targetGrade, setTargetGrade] = useState(75);
   const [newComponent, setNewComponent] = useState({
     name: "",
@@ -61,12 +47,12 @@ export function MarksCalculator({ subjects }: { subjects: Subject[] }) {
     loadMarks();
   }
 
-  async function updateComponent(id: string, obtainedMarks: string) {
+  async function updateComponent(id, obtainedMarks) {
     await api.patchMarkComponent(id, obtainedMarks === "" ? null : obtainedMarks);
     loadMarks();
   }
 
-  async function deleteComponent(id: string) {
+  async function deleteComponent(id) {
     await api.removeMarkComponent(id);
     loadMarks();
   }

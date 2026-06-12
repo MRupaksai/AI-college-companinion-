@@ -5,3 +5,6 @@ out
 *.db
 *.db-journal
 .DS_Store
+
+# pdf worker is copied to public/ on postinstall — commit it for Vercel
+!public/pdf.worker.min.mjs
